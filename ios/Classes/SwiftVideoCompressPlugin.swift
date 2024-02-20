@@ -189,7 +189,11 @@ public class SwiftVideoCompressPlugin: NSObject, FlutterPlugin {
         let isIncludeAudio = includeAudio != nil ? includeAudio! : true
 
         let videoComposition = AVMutableVideoComposition(propertiesOf: sourceVideoAsset)
-        videoComposition.frameDuration = CMTimeMake(value: 1, timescale: Int32(frameRate!))
+        
+        // Apply the frame rate if needed.
+        if frameRate != nil {
+            videoComposition.frameDuration = CMTimeMake(value: 1, timescale: Int32(frameRate!))
+        }
 
         // Rotate the compressed video if needed.
         if rotation != 0 {
