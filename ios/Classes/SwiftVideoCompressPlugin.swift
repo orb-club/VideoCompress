@@ -198,7 +198,6 @@ public class SwiftVideoCompressPlugin: NSObject, FlutterPlugin {
         // Rotate the compressed video if needed.
         if rotation != 0 {
              switch rotation {
-                case 0: videoComposition.renderSize = CGSize(width: CGFloat(sourceVideoTrack.naturalSize.width), height: CGFloat(sourceVideoTrack.naturalSize.height))
                 case 180: videoComposition.renderSize = CGSize(width: CGFloat(sourceVideoTrack.naturalSize.width), height: CGFloat(sourceVideoTrack.naturalSize.height))
                 case -90: videoComposition.renderSize = CGSize(width: CGFloat(sourceVideoTrack.naturalSize.height), height: CGFloat(sourceVideoTrack.naturalSize.width))
                 case 90: videoComposition.renderSize = CGSize(width: CGFloat(sourceVideoTrack.naturalSize.height), height: CGFloat(sourceVideoTrack.naturalSize.width))
@@ -208,9 +207,9 @@ public class SwiftVideoCompressPlugin: NSObject, FlutterPlugin {
             let instruction = AVMutableVideoCompositionInstruction()
             instruction.timeRange = timeRange
             let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: sourceVideoTrack)
-            let t1 :CGAffineTransform
+
+            let t1: CGAffineTransform
             switch rotation {
-                case 0: t1 = CGAffineTransform(translationX: 0, y: 0)
                 case -90: t1 = CGAffineTransform(translationX: 0, y: sourceVideoTrack.naturalSize.width)
                 case 90: t1 = CGAffineTransform(translationX: sourceVideoTrack.naturalSize.height, y: 0)
                 case 180: t1 = CGAffineTransform(translationX: sourceVideoTrack.naturalSize.width, y: sourceVideoTrack.naturalSize.height)
@@ -219,6 +218,7 @@ public class SwiftVideoCompressPlugin: NSObject, FlutterPlugin {
             let t2: CGAffineTransform = t1.rotated(by: CGFloat(rotation!) * .pi / 180)
             let finalTransform: CGAffineTransform = t2
             transformer.setTransform(finalTransform, at: CMTime.zero)
+            
             instruction.layerInstructions = [transformer]
             videoComposition.instructions = [instruction]
         }
